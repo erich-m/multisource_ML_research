@@ -49,6 +49,8 @@ This ML project aims to create and design a ML model capable of predicting vehic
 
 ## Data Sources
 
+Current data files are hidden until TCPS guidelines are met.
+
 ### Data Description
 
 - **Data Sources:** The driving data is from the University of Guelph Oktal driving simulator located in the DRiVE lab. The driving simulator offers 300 degrees of surrounding driving environment complete with rear view display and side view mirrors. The driving environment is created and designed to analyze specific hazard conditions known as turn-across-path hazards. Hazard vehciles drive in-front of the path of the participant either from the opposite side of the lane, or from the right side at intersections. The intersections are comprised of T and 4 way intersections with stop-signs and traffic signals.
@@ -158,4 +160,4 @@ No external contributions are being accepted at this time.
 
 ## License
 
-[LICENSE](LICENSE)
+[MIT LICENSE](LICENSE)
