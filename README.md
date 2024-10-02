@@ -37,18 +37,18 @@ This ML project aims to create and design a ML model capable of predicting vehic
 
 ## Directory Structure
 
-/multisourse_ML_research/
-├── raw_data/
-├── processed_data/
-├── summary_files/
-├── code/
-│ ├── data_processing/
-│ ├── ml_training/
-│ └── utils/
-├── models/
-├── results/
-├── documentation/
-├── README.md
+/multisourse_ML_research/  
+├── raw_data/  
+├── processed_data/  
+├── summary_files/  
+├── code/  
+│ ├── data_processing/  
+│ ├── ml_training/  
+│ └── utils/  
+├── models/  
+├── results/  
+├── documentation/  
+├── README.md  
 
 - `raw_data/`: Contains the raw data from the driving simulator, and the raw data from the eye-tracking (Oktal Driving Simulator, Tobii Eye Tracking)
 - `processed_data/`: Holds data prepared for model training and testing
