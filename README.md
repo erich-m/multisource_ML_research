@@ -57,7 +57,7 @@ Current data files are hidden until TCPS guidelines are met.
 
 The eye-tracking data is from Tobii Pro 3 eye-tracking glasses. The participant drivers were instructed to wear the glasses in order to track eye movement, to ultimately analyze for potential driving behvaiours and patterns that could predict vehicle collisions.
 
-- **Format:** The format of the raw data is .xlsx format. Each of the features are contained in a single column withing the various files. The driving data and the eye tracking data are on separate clocks, and they are synchronized to the closest second by human analysis.
+- **Format:** The format of the raw eye-tracking data is .xlsx format. The driving data is in the form of .csv files. Each of the features are contained in a single column withing the various files. The driving data and the eye tracking data are on separate clocks, and they are synchronized to the closest second by human analysis.
 
 ### Data Preprocessing  
 
