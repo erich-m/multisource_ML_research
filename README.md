@@ -1,4 +1,4 @@
-# multisource_ML_research - Predicting Vehicle Collisions in Turn-Across-Path Hazard Events From Driving And Eye-Tracking Data
+# Predicting Vehicle Collisions in Turn-Across-Path Hazard Events From Driving And Eye-Tracking Data
 
 This ML project aims to create and design a ML model capable of predicting vehicle collisions in simulated turn-across-path hazard events, using both driving data obtained from a driving simulator, and eye-tracking data to provide more insight into driving behaviour and patterns.
 
