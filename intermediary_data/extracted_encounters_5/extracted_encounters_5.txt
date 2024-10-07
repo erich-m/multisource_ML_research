@@ -1,9 +1,0 @@
-Folder: extracted_encounters_5
-Description: 
-Contains participant data extracted from the raw data. 
-Data was extracted by finding the timestamp where the driver vehicle was closest to the intersection locations for their driving route. 
-The encounter was then extracted using this timestamp as the end of the encounter, and using an encounter duration of 5 secounds.
-Encounters were extracted from the raw files into gaze, imu and driving data csv files, and each are separated into their own participant folder
-
-Parameters used:
-encounter_size = 5 seconds
