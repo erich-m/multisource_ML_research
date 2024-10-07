@@ -1,0 +1,17 @@
+Folder: processed_eye_tracking
+Description:
+Constains eye tracking data that has been processed using eye_tracking_processing
+Each of the extracted encounters from the gaze data were processed using filters as described by Tobii eye tracking
+For each gaze encounter, gaps are filles in using gap fill-in interpolation which identifies which gaps should be interpolated based on gap size
+Next, the average eye origins and directions, and pupil size were calculated between the left and right eye. If data is missing from one of the eyes, this is then accounted for
+A moving average noise reducing filter is applied to smooth out the data
+Following this, the I-VT filter is applied which looks at how long the velocity stays above a provided threshold
+Velocity is calcualted using the calculated angle and distance between two points and dividing by the difference in timestamp
+The velocity is analyzed and fixations are identified based on the previous Parameters
+
+Parameters used:
+max gap length for interpolation = default (0.075 milliseconds)
+window size for moving average = default (5 samples)
+window length for velocity calculation = default (20 milliseconds)
+velocity threshold for I-VT filter = 4 degrees/second
+minimum fixation duration = default (0.1 seconds)
