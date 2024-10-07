@@ -30,6 +30,7 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
 
     # iterate through each of the 4 hazards
     for current_hazard in range(0,4):
+        # TODO: Save current hazard as different file. Currently getting one per participant 
         # location of the current intersection
         target_x = intersection_locations.iloc[0,current_hazard*2]
         target_y = intersection_locations.iloc[0,(current_hazard*2)+1]
