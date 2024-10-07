@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import os
 from tqdm import tqdm
 
 import warnings
@@ -11,11 +12,14 @@ encounter_length = float(input("encounter length (seconds) = "))
 # get data summary
 data_summary = pd.read_excel('summary_files/data_summary.xlsx')
 
-for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_summary)):
+for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_summary),colour='green'):
     # get hazard order id and time offset between driving and eye-tracking
     hazard_order = "order_" + str(summary_row["HazardOrder"])
     time_offset = float(summary_row["Time Difference"])
     p_num = summary_row["participant_id"]
+
+    # get the intersection locations for the hazard order
+    intersection_locations = pd.read_excel('summary_files/intersection_locations.xlsx',sheet_name=hazard_order)
 
     # obtain current participant driving data
     driving_df = pd.read_csv(f'raw_data/participant_{p_num}/driving_{p_num}.csv',sep=';',encoding='ISO-8859-1')
@@ -25,15 +29,12 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
     eye_tracking_gaze_df = pd.read_excel(f'raw_data/participant_{p_num}/eye_tracking_{p_num}.xlsx',sheet_name='Gaze Data')
     eye_tracking_imu_df = pd.read_excel(f'raw_data/participant_{p_num}/eye_tracking_{p_num}.xlsx',sheet_name='IMU Data')
 
-    # get the intersection locations for the hazard order
-    intersection_locations = pd.read_excel('summary_files/intersection_locations.xlsx',sheet_name=hazard_order)
-
     # iterate through each of the 4 hazards
     for current_hazard in range(0,4):
-        # TODO: Save current hazard as different file. Currently getting one per participant 
         # location of the current intersection
         target_x = intersection_locations.iloc[0,current_hazard*2]
         target_y = intersection_locations.iloc[0,(current_hazard*2)+1]
+        intersection_type = (list(intersection_locations)[current_hazard*2]).split("_")[2]
         
         # get driver vehicle position cols
         x_col = driving_df.iloc[:,3].astype(float)
@@ -60,6 +61,7 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
         imu_encounter = eye_tracking_imu_df[(eye_tracking_imu_df.iloc[:, 1].astype(float) >= lower_time_bound_offset) & (eye_tracking_imu_df.iloc[:, 1].astype(float) <= upper_time_bound_offset)]
 
         # save the encounters for each participant to csv file in the intermediary data folder
-        driving_encounter.to_csv(f'intermediary_data/extracted_encounters_{int(encounter_length)}/participant_{p_num}/driving_encounter_{p_num}.csv', index=False)
-        gaze_encounter.to_csv(f'intermediary_data/extracted_encounters_{int(encounter_length)}/participant_{p_num}/gaze_encounter_{p_num}.csv', index=False)
-        imu_encounter.to_csv(f'intermediary_data/extracted_encounters_{int(encounter_length)}/participant_{p_num}/imu_encounter_{p_num}.csv', index=False)
+        os.makedirs(f'intermediary_data/extracted_encounters_{int(encounter_length)}/participant_{p_num}',exist_ok=True)
+        driving_encounter.to_csv(f'intermediary_data/extracted_encounters_{int(encounter_length)}/participant_{p_num}/driving_encounter_{p_num}_{intersection_type}.csv', index=False)
+        gaze_encounter.to_csv(f'intermediary_data/extracted_encounters_{int(encounter_length)}/participant_{p_num}/gaze_encounter_{p_num}_{intersection_type}.csv', index=False)
+        imu_encounter.to_csv(f'intermediary_data/extracted_encounters_{int(encounter_length)}/participant_{p_num}/imu_encounter_{p_num}_{intersection_type}.csv', index=False)
