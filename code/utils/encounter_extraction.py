@@ -8,7 +8,7 @@ from pandas.errors import DtypeWarning
 warnings.filterwarnings("ignore", category=DtypeWarning)
 
 # get encounter_length
-encounter_length = float(input("encounter length (seconds) = "))
+encounter_length = float(input("encounter length (seconds) = ") or 5)
 # get data summary
 data_summary = pd.read_excel('summary_files/data_summary.xlsx')
 
