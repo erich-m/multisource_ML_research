@@ -194,3 +194,6 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
         encounter_df['yaw_continuous'] = np.unwrap(np.radians(encounter_df['CoG position/Yaw'])) * 180 / np.pi
         
         encounter_df.to_csv(f'intermediary_data/transformed_encounter_data/participant_{p_num}/transformed_data_{p_num}_{intersection_type}.csv')
+
+        # * some of the graphs do not have the gaze vectors because the gaze is missing for the total duration of the encounter. 
+        # ? these will most likely be removed from the final dataset since they are not yielding any useful information towards the eye tracking component
