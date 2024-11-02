@@ -24,89 +24,88 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
         encounter_df = pd.read_csv(f'intermediary_data/encounter_data/participant_{p_num}/encounter_data_{p_num}_{intersection_type}.csv')
         # print(list(encounter_df.columns))
 
-        # Process each row
         for idx in encounter_df.index:
-            # Get IMU data
+            # acceleration as a 3D vector
             accel = np.array([
                 encounter_df.loc[idx, 'Data Accelerometer X'],
                 encounter_df.loc[idx, 'Data Accelerometer Y'],
                 encounter_df.loc[idx, 'Data Accelerometer Z']
             ])
+            # magentometer as a 3D vector
             mag = np.array([
                 encounter_df.loc[idx, 'Data Magnetometer X'],
                 encounter_df.loc[idx, 'Data Magnetometer Y'],
                 encounter_df.loc[idx, 'Data Magnetometer Z']
             ])
             
-            # Normalize vectors
-            down = normalize(accel)  # Assuming accelerometer mainly measures gravity
+            # normalize vectors
+            down = normalize(accel)  # accelerometer mainly measures gravity
             east = normalize(np.cross(down, mag))
             north = normalize(np.cross(east, down))
             
-            # Create rotation matrix from IMU frame to global frame
+            # rotation matrix from the IMU directions
             R_imu_to_global = np.vstack((east, down, north)).T
             
-            # Get gaze directions for both eyes
+            # gaze direction for left eye as a 3D vector
             left_gaze = np.array([
                 encounter_df.loc[idx, 'Data Eyeleft Gazedirection X'],
                 encounter_df.loc[idx, 'Data Eyeleft Gazedirection Y'],
                 encounter_df.loc[idx, 'Data Eyeleft Gazedirection Z']
             ])
+            # gaze direction for right eye as a 3D vecctor
             right_gaze = np.array([
                 encounter_df.loc[idx, 'Data Eyeright Gazedirection X'],
                 encounter_df.loc[idx, 'Data Eyeright Gazedirection Y'],
                 encounter_df.loc[idx, 'Data Eyeright Gazedirection Z']
             ])
             
-            # Transform gaze vectors to global coordinates
+            # matrix multiply the rotation matrix from the IMU and the gaze vectors to get the orientation of the vectors in global coordinates
             left_gaze_global = R_imu_to_global @ left_gaze
             right_gaze_global = R_imu_to_global @ right_gaze
             
-            # Get car's yaw angle (converting to radians)
+            # get the car direction (yaw, where yaw is the rotation around the vertical axis) in radians
             yaw = np.radians(encounter_df.loc[idx, 'CoG position/Yaw'])
             
-            # Create rotation matrix for car's orientation
+            # 2x2 rotation matrix for the car from the yaw of the car
             R_car = np.array([
                 [np.cos(yaw), -np.sin(yaw)],
                 [np.sin(yaw), np.cos(yaw)]
             ])
             
-            # Project gaze vectors onto horizontal plane (x-z for glasses, x-y for car)
-            # and normalize
+            # project gaze vectors onto horizontal plane (x-z for glasses, x-y for car) and normalize
             left_gaze_horizontal = normalize(np.array([left_gaze_global[0], left_gaze_global[2]]))
             right_gaze_horizontal = normalize(np.array([right_gaze_global[0], right_gaze_global[2]]))
             
-            # Transform to car coordinates
-            # First adjust for driver position offset (1.5m back, 0.5m right)
+            # transform to car coordinates and adjust for driver position offset (1.5m back, 0.5m right)
             car_position = np.array([
                 encounter_df.loc[idx, 'CoG position/X'],
                 encounter_df.loc[idx, 'CoG position/Y']
             ])
             
-            # Driver position in car coordinates (before rotation)
+            # driver position in car coordinates (before rotation)
             driver_offset = np.array([-1.5, -0.5])
             
-            # Apply car rotation to driver offset
+            # apply car rotation to driver offset
             driver_offset_rotated = R_car @ driver_offset
             
-            # Calculate driver position in global coordinates
+            # calculate driver position in global coordinates
             driver_position = car_position + driver_offset_rotated
             
-            # Transform gaze vectors to car coordinates
+            # transform gaze vectors to car coordinates
             left_gaze_car = R_car.T @ left_gaze_horizontal
             right_gaze_car = R_car.T @ right_gaze_horizontal
             
-            # Store transformed vectors back in DataFrame
+            # store transformed vectors back in df
             encounter_df.loc[idx, 'left_gaze_car_x'] = left_gaze_car[0]
             encounter_df.loc[idx, 'left_gaze_car_y'] = left_gaze_car[1]
             encounter_df.loc[idx, 'right_gaze_car_x'] = right_gaze_car[0]
             encounter_df.loc[idx, 'right_gaze_car_y'] = right_gaze_car[1]
             
-            # Store driver position
+            # store driver position
             encounter_df.loc[idx, 'driver_position_x'] = driver_position[0]
             encounter_df.loc[idx, 'driver_position_y'] = driver_position[1]
 
-        # Handle yaw angle discontinuity
+        # handle yaw angle discontinuity (separate from the above calculations)
         encounter_df['yaw_continuous'] = np.unwrap(np.radians(encounter_df['CoG position/Yaw'])) * 180 / np.pi
 
         os.makedirs(f'intermediary_data/transformed_encounter_data/participant_{p_num}',exist_ok=True)
