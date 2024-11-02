@@ -55,4 +55,5 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
         # print(merged_df.isna().sum())
 
         os.makedirs(f'intermediary_data/encounter_data/participant_{p_num}', exist_ok=True)
-        merged_df.to_csv(f'intermediary_data/encounter_data/participant_{p_num}/encounter_data_{p_num}_{intersection_type}.csv',index=False)
+        merged_df.index.name = 'Timestamp'
+        merged_df.to_csv(f'intermediary_data/encounter_data/participant_{p_num}/encounter_data_{p_num}_{intersection_type}.csv',index=True)
