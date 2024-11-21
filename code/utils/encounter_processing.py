@@ -19,67 +19,27 @@ HAZARD_RADIUS = 2.0
 
 for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_summary), colour='green'):
     hazard_order = "order_" + str(summary_row["HazardOrder"])
+    hazard_label_order = "order_" + str(summary_row["HazardOrder"]) + "_hazards"
     p_num = summary_row["participant_id"]
 
     intersection_locations = pd.read_excel('summary_files/intersection_locations.xlsx', sheet_name=hazard_order)
+    hazard_labels = pd.read_excel('summary_files/intersection_locations.xlsx', sheet_name=hazard_label_order)
     for current_hazard in range(0, 4):
         intersect_count = 0
         intersection_type = (list(intersection_locations)[current_hazard*2]).split("_")[2]
         encounter_df = pd.read_csv(f'intermediary_data/encounter_data/participant_{p_num}/encounter_data_{p_num}_{intersection_type}.csv')
         encounter_df.columns = encounter_df.columns.str.strip()
-        # check which hazard vehicle is moving
-        moving_hazard = None
-        max_movement = 0
-        for i in range(1, 5):
-            x_col = f'CoG position/X.{i}'
-            y_col = f'CoG position/Y.{i}'
-            
-            if x_col not in encounter_df.columns or y_col not in encounter_df.columns:
-                continue
-                
-            start_pos = np.array([encounter_df[x_col].iloc[0], encounter_df[y_col].iloc[0]])
-            end_pos = np.array([encounter_df[x_col].iloc[-1], encounter_df[y_col].iloc[-1]])
-            movement = int(np.round(np.linalg.norm(end_pos - start_pos)))
-            
-            if movement > max_movement and movement > 0:  # Changed threshold to match previous suggestion
-                max_movement = movement
-                moving_hazard = i
-        
-        if moving_hazard is None:
-            # get driver position (middle of dataset to avoid edge cases)
-            mid_idx = len(encounter_df) // 2
-            driver_pos = np.array([
-                encounter_df['CoG position/X'].iloc[mid_idx],
-                encounter_df['CoG position/Y'].iloc[mid_idx]
-            ])
-            
-            # find closest hazard to driver
-            min_distance = float('inf')
-            moving_hazard = None
-            
-            for i in range(1, 5):
-                x_col = f'CoG position/X.{i}'
-                y_col = f'CoG position/Y.{i}'
-                
-                if x_col not in encounter_df.columns or y_col not in encounter_df.columns:
-                    continue
-                    
-                hazard_pos = np.array([
-                    encounter_df[x_col].iloc[mid_idx],
-                    encounter_df[y_col].iloc[mid_idx]
-                ])
-                
-                distance = np.linalg.norm(hazard_pos - driver_pos)
-                
-                if distance < min_distance:
-                    min_distance = distance
-                    moving_hazard = i
-            
-            print(f"Using closest hazard (vehicle {moving_hazard}) at distance {min_distance:.2f}m")
 
-        # moving hzard or closest hazard is set to be the hazard vehicle
+        # Find the vehicle with the minimum distance
+        moving_hazard = int((hazard_labels.iloc[0,current_hazard*2]).split('_')[1])+1
+
+        # Get the column names for the hazard x and y positions
         hazard_x_col = f'CoG position/X.{moving_hazard}'
         hazard_y_col = f'CoG position/Y.{moving_hazard}'
+
+        # Add hazard x and y columns to the encounter_df with meaningful labels
+        encounter_df[f'hazard_{moving_hazard}_x'] = encounter_df[hazard_x_col]
+        encounter_df[f'hazard_{moving_hazard}_y'] = encounter_df[hazard_y_col]
         
         # initialize gaze intersection column
         encounter_df['gaze_intersects_hazard'] = False
