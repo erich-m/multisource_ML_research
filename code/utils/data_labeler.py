@@ -1,12 +1,7 @@
 import pandas as pd
 import numpy as np
-from scipy.spatial.transform import Rotation
 import os
 from tqdm import tqdm
-import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
-from matplotlib.collections import LineCollection
-import matplotlib.colors as mcolors
 
 import warnings
 from pandas.errors import DtypeWarning
@@ -15,9 +10,13 @@ warnings.filterwarnings("ignore", category=DtypeWarning)
 data_summary = pd.read_excel('summary_files/data_summary.xlsx')
 
 # define radius for hazard detection in meters
-COLLISION_DISTANCE = 4.0
+COLLISION_DISTANCE = 2.0
+
+# tally the number of collisions
 collision_total = 0
 ncollision_total = 0
+
+collision_summary = pd.DataFrame(columns=['p_num','intersection_type','global_collision_flag','time_of_collision'])
 
 for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_summary), colour='green'):
     hazard_order = "order_" + str(summary_row["HazardOrder"])
@@ -26,6 +25,7 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
 
     intersection_locations = pd.read_excel('summary_files/intersection_locations.xlsx', sheet_name=hazard_order)
     for current_hazard in range(0, 4):
+        first_collision_time = np.inf
         intersect_count = 0
         intersection_type = (list(intersection_locations)[current_hazard*2]).split("_")[2]
         encounter_df = pd.read_csv(f'intermediary_data/transformed_encounter_data/participant_{p_num}/transformed_data_{p_num}_{intersection_type}.csv')
@@ -73,6 +73,14 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
 
         file_label = 'c' if COLLISION_DETECTED else 'nc'
         
+        collision_row = {'p_num':p_num,'intersection_type':intersection_type,'global_collision_flag':COLLISION_DETECTED,'time_of_collision':first_collision_time}
+        collision_summary = collision_summary._append(collision_row,ignore_index=True)
+
         os.makedirs(f'intermediary_data/labeled_data/participant_{p_num}', exist_ok=True)
         encounter_df.to_csv(f'intermediary_data/labeled_data/participant_{p_num}/labeled_data_{p_num}_{intersection_type}_{file_label}.csv')
+
 print(f'collisions={collision_total};ncollsions={ncollision_total}')
+collision_summary.to_csv(f'summary_files/collision_summary.csv')
+
+# TODO: Cut off after collision point since I don't need it
+# TODO: Keep regression and global collision label
