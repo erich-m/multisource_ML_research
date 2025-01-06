@@ -1,6 +1,8 @@
-# This script takes, from a given encounter, the drive data, the processed gaze data, and the imu data and merges the data into a single dataframe using the time column as the index
-# This script also uses spline interpolation to fill in missing data so that all the columns are filled correctly for the IMU processing stage
-# data is sent to encounter_data, which is still separated by the hazard type and participant
+""" This script is the third script in the data processing pipeline.
+It takes the eye tracking data from processed_eye_tracking and merges it with the driving and imu data from the same participant
+After each merge of the files, the data is interpolated using spline interpolation.
+Each participant has 4 encounters, one for each intersection type"""
+
 import pandas as pd
 import numpy as np
 import os

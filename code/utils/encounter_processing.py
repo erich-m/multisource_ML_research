@@ -1,3 +1,9 @@
+""" This script is the fourth script in the data preprocessing pipeline.
+In this script, the eye tracking coordinates are converted from the eye tracking coordinate system to the car coordinate system.
+The car world gaze vector is then compared with the position of the hazard vehicle to determine if the gaze vector intersects the hazard vehcile within a certain radius.
+The results are saved in the transformed_encounter_data folder.
+ """
+
 import pandas as pd
 import numpy as np
 from scipy.spatial.transform import Rotation

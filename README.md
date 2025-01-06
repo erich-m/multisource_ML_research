@@ -72,15 +72,26 @@ The eye-tracking data is from Tobii Pro 3 eye-tracking glasses. The participant 
 
 ### Data Preprocessing  
 
-- **Preprocessing Steps:** In-progress
-- **Scripts:** In-progress
+- **Preprocessing Stages:**
+
+1. Encounters are extracted first to an intermediary dataset (`extracted_encounters_#`). The extracted encounters are determined by calculating the time when the driver vehicle is closest to the intersection of each respective hazard vehicle depending on the hazard order for the given drive. From that closest time, and backwards by an input amount (default is 5 seconds), the length of the input time is extracted and stored separately
+2. The eye tracking data is the processed from the encounters. The algorithm that is applied is the I-VT threshold method which determines if the speed of the eye movement is above a certain threshold - the movement is classified as either  afixation or saccade and is labeled accordingly in the data. There are several different parameters that can be adjusted but defaults are set up for optimal use based on literature from Tobii for implementation of the algorithm
+3. Next, each of the encoutners that are extracted have the eye tracking and the driving data merged together. First the datasets are aligned in time based on offsets found in `data_summary.xlsx`, and then they are merged together. Next, the missing values from encoutner extractions are filled using spline interpolation with a default spline order of 5 to fill in the gaps. The merged encounters are then stored in `encounter_data`
+4. Each hazard encounter is then processed using `encounter_processing.py` to obtain the eye tracking coordinates from the 3D space that the glasses operate in and convert it to 2D coordinates relative to the driver in the driving environment. To do this, the IMU data is applied and the coordinates are translated to where the driver is for a given record. The data is also processed to determine fixations and saccades. The eye gaze direction vector is averaged between the left and right eye, and is then processed to see if the direction vector intersects a radius around the hazard vehicle (direction of the vehicle is not in the dataset to check actual bounding boxes). The output from this script is fed to `transformed_encounter_data` along with visuals to plot the gaze vector and the driver vehicle accordingly
+
+- **Scripts (respective to stages above):**
+
+1. encounter_extraction.py
+2. eye_tracking_processing.py
+3. encounter_merge.py
+4. encounter_processing.py
 
 ## Data processing Workflow
 
 Provided is a brief summary of the machine learning pipeline for this project:
 
 1. **Raw Data:** Data is loaded from `raw_data/`.
-2. **Cleaning and Transformation:** Performed by scripts in `data_processing/`.
+2. **Cleaning and Transformation:** Performed by scripts in `data_processing/`, `eye_tracking_processing/` and `driving_processing/`.
 3. **Feature Extraction:** Relevant features are extracted and saved in `processed_data/extracted_features/`.
 4. **Training/Testing Split:** Data is manually split into training and testing sets.
 

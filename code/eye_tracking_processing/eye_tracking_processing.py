@@ -1,3 +1,8 @@
+""" This is the second script in the data preprocessing pipeline.
+It applies interpolation and the gap fill-in interpolation algorithm to the eye tracking from the extracted encounters
+The script calculates the average between the left and right eye, applies a moving average filter to reduce noise, and implements the I-VT fixation filter to identify fixations.
+The data files are saved in intermediary_data/processed_eye_tracking"""
+
 # implementation of gap fill-in interpolation algorithm, eye position averaging algorithm, moving average algorithm (for noise), and the I-VT implementation is detailed in Tobii I-VT Fixation Filter:
 # Available Online: http://www.vinis.co.kr/ivt_filter.pdf
 

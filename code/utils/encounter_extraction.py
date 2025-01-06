@@ -1,3 +1,9 @@
+""" This script is the first stage of the data preprocessing pipeline. 
+It extracts the encounters for each participant and saves them to csv files in the intermediary data folder.
+Encounters are extracted based on the closest approach to the intersection where the hazard approaches the driver. 
+The script only gets from the identified point of interest and backwards up to a specified length of time.
+The data is saved in the intermediary_data folder in extracted_encounters_{encounter_length}"""
+
 import pandas as pd
 import numpy as np
 import os
