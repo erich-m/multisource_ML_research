@@ -125,9 +125,11 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
             ])
             
             # set the driver offset based on the origin of the vehicle model and the distance to the driver seat
-            # the driver sits 1.5m forward and 0.5m to the left of the origin of the car model
-            # TODO: Adjust model to driver translation
-            driver_offset = np.array([-1.5, -0.5])
+            # the driver sits 1.497m backward and 0.4m to the left of the origin of the car model in the initial state
+            # the initial driver vehicle position is (-35.64, -25.06)
+            # the initial driver vehicle driver seat is (-37.137,-24.660)
+            
+            driver_offset = np.array([1.497, -0.4])
             # apply the cars rotation to the drivers position within the car
             driver_offset_rotated = R_car @ driver_offset
             # apply the offset to the car position in space to get the driver position in the car world
