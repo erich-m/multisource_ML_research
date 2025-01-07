@@ -43,7 +43,6 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
         hazard_x_col = f'CoG position/X.{moving_hazard}'
         hazard_y_col = f'CoG position/Y.{moving_hazard}'
 
-        # Add hazard x and y columns to the encounter_df with meaningful labels
         encounter_df[f'hazard_{moving_hazard}_x'] = encounter_df[hazard_x_col]
         encounter_df[f'hazard_{moving_hazard}_y'] = encounter_df[hazard_y_col]
         
@@ -176,6 +175,7 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
             encounter_df.loc[idx, 'combined_gaze_car_y'] = combined_gaze_car[1]
             encounter_df.loc[idx, 'driver_position_x'] = driver_position[0]
             encounter_df.loc[idx, 'driver_position_y'] = driver_position[1]
+            encounter_df.loc[idx, 'distance_to_hazard'] = distance
 
         # create timeline visualization
         plt.figure(figsize=(20, 15))
