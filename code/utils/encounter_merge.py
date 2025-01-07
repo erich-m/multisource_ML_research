@@ -28,14 +28,14 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
     for current_hazard in range(0,4):
         intersection_type = (list(intersection_locations)[current_hazard*2]).split("_")[2]
         
-        drive_encounter = pd.read_csv(f'intermediary_data/extracted_encounters_5/participant_{p_num}/driving_encounter_{p_num}_{intersection_type}.csv')
+        drive_encounter = pd.read_csv(f'data/intermediary_data/extracted_encounters_5/participant_{p_num}/driving_encounter_{p_num}_{intersection_type}.csv')
         drive_encounter.set_index(drive_encounter.columns[0], inplace=True)
         
-        imu_encounter = pd.read_csv(f'intermediary_data/extracted_encounters_5/participant_{p_num}/imu_encounter_{p_num}_{intersection_type}.csv')
+        imu_encounter = pd.read_csv(f'data/intermediary_data/extracted_encounters_5/participant_{p_num}/imu_encounter_{p_num}_{intersection_type}.csv')
         imu_encounter.set_index(imu_encounter.columns[1], inplace=True)
         imu_encounter.rename(columns={'Type':'Type_imu'},inplace=True)
 
-        gaze_encounter = pd.read_csv(f'intermediary_data/processed_eye_tracking/participant_{p_num}/processed_gaze_{p_num}_{intersection_type}.csv')
+        gaze_encounter = pd.read_csv(f'data/intermediary_data/processed_eye_tracking/participant_{p_num}/processed_gaze_{p_num}_{intersection_type}.csv')
         gaze_encounter.set_index(gaze_encounter.columns[1], inplace=True)
         gaze_encounter.rename(columns={'Type':'Type_gaze'},inplace=True)
 
@@ -56,6 +56,6 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
         # print(merged_df.head)
         # print(merged_df.isna().sum())
 
-        os.makedirs(f'intermediary_data/encounter_data/participant_{p_num}', exist_ok=True)
+        os.makedirs(f'data/intermediary_data/encounter_data/participant_{p_num}', exist_ok=True)
         merged_df.index.name = 'Timestamp'
-        merged_df.to_csv(f'intermediary_data/encounter_data/participant_{p_num}/encounter_data_{p_num}_{intersection_type}.csv',index=True)
+        merged_df.to_csv(f'data/intermediary_data/encounter_data/participant_{p_num}/encounter_data_{p_num}_{intersection_type}.csv',index=True)

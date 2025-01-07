@@ -23,7 +23,7 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
     hazard_label_order = "order_" + str(summary_row["HazardOrder"]) + "_hazards"
     p_num = summary_row["participant_id"]
 
-    participant_folder = f'intermediary_data/labeled_data/participant_{p_num}'
+    participant_folder = f'data/intermediary_data/labeled_data/participant_{p_num}'
     os.makedirs(participant_folder, exist_ok=True)
 
     # Remove existing labeled data files for the participant
@@ -38,7 +38,7 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
         intersect_count = 0
         intersection_type = (list(intersection_locations)[current_hazard * 2]).split("_")[2]
         encounter_df = pd.read_csv(
-            f'intermediary_data/transformed_encounter_data/participant_{p_num}/transformed_data_{p_num}_{intersection_type}.csv'
+            f'data/intermediary_data/transformed_encounter_data/participant_{p_num}/transformed_data_{p_num}_{intersection_type}.csv'
         )
         encounter_df.columns = encounter_df.columns.str.strip()
 

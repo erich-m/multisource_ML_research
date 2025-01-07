@@ -39,7 +39,7 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
     for current_hazard in range(0,4):
         intersection_type = (list(intersection_locations)[current_hazard*2]).split("_")[2]
 
-        gaze_encounter = pd.read_csv(f'intermediary_data/extracted_encounters_5/participant_{p_num}/gaze_encounter_{p_num}_{intersection_type}.csv')
+        gaze_encounter = pd.read_csv(f'data/intermediary_data/extracted_encounters_5/participant_{p_num}/gaze_encounter_{p_num}_{intersection_type}.csv')
         gaze_encounter['Timestamp'] = gaze_encounter['Timestamp'].astype(float)
 
         columns_to_interpolate = [col for col in gaze_encounter.columns if col not in ['Timestamp', 'Type']]
@@ -200,9 +200,9 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
                     processed_gaze.loc[j, 'Fixation_ID'] = current_fixation_id
         processed_gaze['Fixation_ID'] = processed_gaze['Fixation_ID'].fillna(value=-1)
 
-        os.makedirs(f'intermediary_data/processed_eye_tracking/participant_{p_num}',exist_ok=True)
+        os.makedirs(f'data/intermediary_data/processed_eye_tracking/participant_{p_num}',exist_ok=True)
 
-        processed_gaze.to_csv(f'intermediary_data/processed_eye_tracking/participant_{p_num}/processed_gaze_{p_num}_{intersection_type}.csv', index=False)
+        processed_gaze.to_csv(f'data/intermediary_data/processed_eye_tracking/participant_{p_num}/processed_gaze_{p_num}_{intersection_type}.csv', index=False)
 
         # plot the velocity data into a chart to visualize and save
         plt.figure(figsize=(12, 6))
@@ -213,5 +213,5 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
         plt.axhline(y=velocity_threshold, color='red', linestyle='--', label='Velocity Threshold')
         plt.legend()
 
-        plt.savefig(f'intermediary_data/processed_eye_tracking/participant_{p_num}/processed_gaze_chart_{p_num}_{intersection_type}.png')
+        plt.savefig(f'data/intermediary_data/processed_eye_tracking/participant_{p_num}/processed_gaze_chart_{p_num}_{intersection_type}.png')
         plt.close()

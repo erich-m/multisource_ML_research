@@ -33,7 +33,7 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
     for current_hazard in range(0, 4):
         intersect_count = 0
         intersection_type = (list(intersection_locations)[current_hazard*2]).split("_")[2]
-        encounter_df = pd.read_csv(f'intermediary_data/encounter_data/participant_{p_num}/encounter_data_{p_num}_{intersection_type}.csv')
+        encounter_df = pd.read_csv(f'data/intermediary_data/encounter_data/participant_{p_num}/encounter_data_{p_num}_{intersection_type}.csv')
         encounter_df.columns = encounter_df.columns.str.strip()
 
         # Find the vehicle with the minimum distance
@@ -254,15 +254,15 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
         sm = plt.cm.ScalarMappable(cmap=plt.cm.viridis, norm=norm)
         plt.colorbar(sm, ax=ax3, label='Time (s)')
 
-        os.makedirs(f'intermediary_data/transformed_encounter_data/participant_{p_num}/timeline_visualization', exist_ok=True)
+        os.makedirs(f'data/intermediary_data/transformed_encounter_data/participant_{p_num}/timeline_visualization', exist_ok=True)
 
         plt.tight_layout()
-        plt.savefig(f'intermediary_data/transformed_encounter_data/participant_{p_num}/timeline_visualization/timeline_visualization_{p_num}_{intersection_type}.png')
+        plt.savefig(f'data/intermediary_data/transformed_encounter_data/participant_{p_num}/timeline_visualization/timeline_visualization_{p_num}_{intersection_type}.png')
         plt.close()
 
         encounter_df['yaw_continuous'] = np.unwrap(np.radians(encounter_df['CoG position/Yaw'])) * 180 / np.pi
         
-        encounter_df.to_csv(f'intermediary_data/transformed_encounter_data/participant_{p_num}/transformed_data_{p_num}_{intersection_type}.csv',index=False)
+        encounter_df.to_csv(f'data/intermediary_data/transformed_encounter_data/participant_{p_num}/transformed_data_{p_num}_{intersection_type}.csv',index=False)
         # print(f"for intersection {intersection_type}, {p_num}. intersect_count={intersect_count}")
 
         # *some of the graphs do not have the gaze vectors because the gaze is missing for the total duration of the encounter. 
