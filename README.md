@@ -23,34 +23,37 @@ This ML project aims to create and design a ML model capable of predicting vehic
 
 ### Goal
 
-- **Goal:** The goal of this project is to predict driver behaviour using eye-tracking and driving data
+The goal of this project is to predict driver behaviour using eye-tracking and driving data
 
 ### Motivation
 
-- **Motivation:** This project aims to solve several problems in the field of driving. As AI becomes more prevalent, the rate at which decisions are made while driving is increased exponentially. If an AI makes an error that requires human intervention, the time required to act may be too late. Therefore, this project aims to predict driving collisions and hazard impacts before they occur to allow human drivers to override the AI system before consequences arise. This work is also important in vehicles without self-driving capabilities, as it can help enhance driving performance and reduce the number of collisions in these specific turn-across-path hazard scenarios
+This project aims to solve several problems in the field of driving. As AI becomes more prevalent, the rate at which decisions are made while driving is increased exponentially. If an AI makes an error that requires human intervention, the time required to act may be too late. Therefore, this project aims to predict driving collisions and hazard impacts before they occur to allow human drivers to override the AI system before consequences arise. This work is also important in vehicles without self-driving capabilities, as it can help enhance driving performance and reduce the number of collisions in these specific turn-across-path hazard scenarios
 
 ### Current Status
 
-- **Current Status:** This project is in-progress as part of research for a MASc. Eng + AI
+This project is in-progress as part of research for a MASc. Eng + AI
 
 ---
 
 ## Directory Structure
 
-/multisourse_ML_research/  
-├── raw_data/  
-├── processed_data/  
-├── summary_files/  
-├── code/  
-│ ├── data_processing/  
-│ ├── ml_training/  
-│ └── utils/  
-├── models/  
-├── results/  
-├── documentation/  
-├── README.md  
+    /multisourse_ML_research/  
+    ├──data
+    │ ├──raw_data/  
+    │ ├──intermediary_data/  
+    │ └── processed_data/  
+    ├── summary_files/  
+    ├── code/  
+    │ ├── data_processing/  
+    │ ├── ml_training/  
+    │ └── utils/  
+    ├── models/  
+    ├── results/  
+    ├── documentation/  
+    ├── README.md  
 
 - `raw_data/`: Contains the raw data from the driving simulator, and the raw data from the eye-tracking (Oktal Driving Simulator, Tobii Eye Tracking)
+- `intermediary_data/`: Contains the data as it flows through the preprocessing stages
 - `processed_data/`: Holds data prepared for model training and testing
 - `code/`: Python scripts for data processing and machine learning
 - `models/`: Trained models and their configurations
@@ -88,15 +91,15 @@ The eye-tracking data is from Tobii Pro 3 eye-tracking glasses. The participant 
 3. `encounter_merge.py`
 4. `encounter_processing.py`
 5. `data_labeler.py`
+6. `encounter_split.py`
 
-## Data processing Workflow
+## Data Processing Workflow
 
 Provided is a brief summary of the machine learning pipeline for this project:
 
 1. **Raw Data:** Data is loaded from `raw_data/`.
-2. **Cleaning and Transformation:** Performed by scripts in `data_processing/`, `eye_tracking_processing/` and `driving_processing/`.
-3. **Feature Extraction:** Relevant features are extracted and saved in `processed_data/extracted_features/`.
-4. **Training/Testing Split:** Data is manually split into training and testing sets.
+2. **Cleaning and Transformation:** Performed by scripts in `data_processing/`, `eye_tracking_processing/` and `driving_processing/`
+3. **Training/Testing Split:** Data is manually split into training and testing sets.
 
 ---
 
@@ -122,16 +125,23 @@ Provided is a brief summary of the machine learning pipeline for this project:
 
 ### Requirements
 
-- **Python Version:** The project is written and tested in Python version 3.12.2. Other versions may not be supported
-- **Dependencies:** In-progress
+- **Python Version:** The project is written and tested in Python version **3.12.8**. Other versions may not be supported
+- **Dependencies:** This project requires the following lbiraries  to be installed:
+  - pandas  
+  - numpy
+  - os
+  - shutil
+  - tqdm
+  - matplotllib
+  - scipy
+  - sklearn
 
 ## Usage
 
 ### How to Run the Project
 
-In-progress
-
 1. **Data Processing:**  
+    Several scripts are written to be used in a specfic order to process the set of data. Refer to the **Data Processing Workflow** header. All of the scripts can be run simply by using `py script_name.py`.
 2. **Training the Model:**  
 3. **Testing the Model:**  
 
