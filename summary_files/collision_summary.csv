@@ -1,4 +1,4 @@
-,p_num,intersection_type,global_collision_flag,time_of_collision,record_count
+index,p_num,intersection_type,global_collision_flag,time_of_collision,record_count
 0,0,lthalf,False,inf,1198.0
 1,0,ltminor,False,inf,1189.0
 2,0,ltsignal,False,inf,1197.0
