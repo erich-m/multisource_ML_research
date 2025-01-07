@@ -8,6 +8,7 @@ import os
 import shutil
 from tqdm import tqdm
 
+RANDOM_STATE = 42
 BINS = 10
 
 # load collision summary file
@@ -22,6 +23,11 @@ os.makedirs('data/intermediary_data/binned_data',exist_ok=True)
 for b in range(0,BINS):
     os.makedirs(f'data/intermediary_data/binned_data/bin_{b}',exist_ok=True)
     os.makedirs(f'data/processed_data/binned_data/bin_{b}',exist_ok=True)
+
+    for file in os.listdir(f'data/intermediary_data/binned_data/bin_{b}'):
+        os.remove(os.path.join(f'data/intermediary_data/binned_data/bin_{b}',file))
+
+collision_summary = collision_summary.sample(frac=1,random_state=RANDOM_STATE).reset_index(drop=True)
 
 # add participants to the bins
 for i in tqdm(range(0,len(collision_summary)),colour='green'):
