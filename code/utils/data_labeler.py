@@ -77,7 +77,7 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
                          'time_of_collision': first_collision_time, 'record_count': len(encounter_df)}
         collision_summary = collision_summary._append(collision_row, ignore_index=True)
 
-        encounter_df.to_csv(f'{participant_folder}/labeled_data_{p_num}_{intersection_type}_{file_label}.csv')
+        encounter_df.to_csv(f'{participant_folder}/labeled_data_{p_num}_{intersection_type}_{file_label}.csv', index=False)
 
 print(f'collisions={collision_total};ncollisions={ncollision_total}')
 collision_summary.to_csv('summary_files/collision_summary.csv')

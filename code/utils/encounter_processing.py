@@ -262,7 +262,7 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
 
         encounter_df['yaw_continuous'] = np.unwrap(np.radians(encounter_df['CoG position/Yaw'])) * 180 / np.pi
         
-        encounter_df.to_csv(f'intermediary_data/transformed_encounter_data/participant_{p_num}/transformed_data_{p_num}_{intersection_type}.csv')
+        encounter_df.to_csv(f'intermediary_data/transformed_encounter_data/participant_{p_num}/transformed_data_{p_num}_{intersection_type}.csv',index=False)
         # print(f"for intersection {intersection_type}, {p_num}. intersect_count={intersect_count}")
 
         # *some of the graphs do not have the gaze vectors because the gaze is missing for the total duration of the encounter. 
