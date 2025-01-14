@@ -1,1 +1,3 @@
-Type,Timestamp,Data Accelerometer X,Data Accelerometer Y,Data Accelerometer Z,Data Gyroscope X,Data Gyroscope Y,Data Gyroscope Z,Data Magnetometer X,Data Magnetometer Y,Data Magnetometer Z
+version https://git-lfs.github.com/spec/v1
+oid sha256:6665212351ba2c38c05fc65bc7f814e18ab7c6880b41967f96cf271fa2048e8d
+size 190

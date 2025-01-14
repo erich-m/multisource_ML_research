@@ -1,1 +1,3 @@
-Type,Timestamp,Data Gaze2D X,Data Gaze2D Y,Data Gaze3D X,Data Gaze3D Y,Data Gaze3D Z,Data Eyeleft Gazeorigin X,Data Eyeleft Gazeorigin Y,Data Eyeleft Gazeorigin Z,Data Eyeleft Gazedirection X,Data Eyeleft Gazedirection Y,Data Eyeleft Gazedirection Z,Data Eyeleft Pupildiameter,Data Eyeright Gazeorigin X,Data Eyeright Gazeorigin Y,Data Eyeright Gazeorigin Z,Data Eyeright Gazedirection X,Data Eyeright Gazedirection Y,Data Eyeright Gazedirection Z,Data Eyeright Pupildiameter
+version https://git-lfs.github.com/spec/v1
+oid sha256:53f4bfe0c1525e57514793c89560f64c9b1a29490bf395d30f758dd791f38b25
+size 477
