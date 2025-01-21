@@ -1,3 +1,8 @@
+""" This is the sixth script in the processing pipeline
+Once the data has been labeled, the data is sorted into bins. First, the order of participant files are shuffled using a random state variable
+Then the files are iterated through one by one. Collision and non collision files are added to the bins in a round robin order
+Each bin will have a balanced amount of collision and non collision files """
+
 import pandas as pd
 import numpy as np
 import os
@@ -24,6 +29,7 @@ for b in range(0,BINS):
     for file in os.listdir(f'data/processed_data/binned_data/bin_{b}'):
         os.remove(os.path.join(f'data/processed_data/binned_data/bin_{b}',file))
 
+# shuffle the order of the participants
 collision_summary = collision_summary.sample(frac=1,random_state=RANDOM_STATE).reset_index(drop=True)
 
 def create_windowed_data(df, window_size):

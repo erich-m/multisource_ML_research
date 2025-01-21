@@ -202,6 +202,8 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
 
         os.makedirs(f'data/intermediary_data/processed_eye_tracking/participant_{p_num}',exist_ok=True)
 
+        # for c, col in enumerate(processed_gaze.columns):
+        #     print(c,col)
         processed_gaze.to_csv(f'data/intermediary_data/processed_eye_tracking/participant_{p_num}/processed_gaze_{p_num}_{intersection_type}.csv', index=False)
 
         # plot the velocity data into a chart to visualize and save

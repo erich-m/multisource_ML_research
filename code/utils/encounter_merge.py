@@ -50,6 +50,17 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
         # * there are still some columns in some of the dataframes that are entirely empty and should be removed before training any models
         # ! there is a suppressed warning with the interpolation. some of the values are too small and so the spline is approximated
         # print(merged_df.shape)
+        # merge the three datasets together into a single dataframe using the timestamp as the index
+        merged_df = drive_encounter.join([gaze_encounter,imu_encounter], how='outer')
+        merged_df = merged_df.infer_objects(copy=False)
+
+        # Clean the index
+        merged_df = merged_df[merged_df.index.notna()]  # Remove rows with NaN indices
+        merged_df.index = pd.to_numeric(merged_df.index, errors='coerce')  # Convert index to numeric
+        merged_df = merged_df[merged_df.index.notna()]  # Remove any rows where index conversion created NaNs
+        merged_df.sort_index(inplace=True)
+
+        # interpolate missing values using spline interpolation (default is order 5 spline)
         merged_df.interpolate(method='spline',order=splineOrder,inplace=True)
         merged_df.interpolate(method='ffill', inplace=True) # fill in remaining NAN values
         merged_df.interpolate(method='bfill', inplace=True) # fill in remaining NAN values
@@ -58,4 +69,9 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
 
         os.makedirs(f'data/intermediary_data/encounter_data/participant_{p_num}', exist_ok=True)
         merged_df.index.name = 'Timestamp'
+
+        # for c, col in enumerate(merged_df.columns):
+        #     print(c,col)
+
+        merged_df.drop(columns=["Type_imu"],inplace=True) # remove unnessecary columns
         merged_df.to_csv(f'data/intermediary_data/encounter_data/participant_{p_num}/encounter_data_{p_num}_{intersection_type}.csv',index=True)

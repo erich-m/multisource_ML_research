@@ -1,3 +1,8 @@
+""" This is the fifth script in the data processing pipeline. 
+Once the data has been processed, merged and interpolated, the hazard vehicle and the participant vehicle locations are compared to check if collision occured
+If there is a collision, the column called global_collision_flag is set to true to indicate that there is a collision in the encounter
+There is also a time to collision that is calculated by taking the time of collision as time 0 and counting down using the timestamp
+This label can be used for regression. if there is no collision, the flag previous is set to false and the time_to_collision is set to inf """
 import pandas as pd
 import numpy as np
 import os
@@ -43,23 +48,17 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
         encounter_df.columns = encounter_df.columns.str.strip()
 
         # 1. Label data with global collision flag to indicate if driver had collision
-        hazard_columns = [col for col in encounter_df.columns if col.startswith('hazard_') and col.endswith('_x')]
-        if not hazard_columns:
-            raise ValueError("No hazard position columns found in dataframe")
-
-        hazard_num = hazard_columns[0].split('_')[1]
-
         encounter_df['global_collision_flag'] = (
-            ((encounter_df['driver_position_x'] - encounter_df[f'hazard_{hazard_num}_x'])**2 +
-             (encounter_df['driver_position_y'] - encounter_df[f'hazard_{hazard_num}_y'])**2)**0.5
+            ((encounter_df['driver_position_x'] - encounter_df[f'CoG position/X.hazard'])**2 +
+             (encounter_df['driver_position_y'] - encounter_df[f'CoG position/Y.hazard'])**2)**0.5
             < COLLISION_DISTANCE
         ).any()
 
         # 2. Label data with regression to first collision flag, and drop rows after the collision point
         if encounter_df['global_collision_flag'].any():
             first_collision_time = encounter_df.loc[
-                ((encounter_df['driver_position_x'] - encounter_df[f'hazard_{hazard_num}_x'])**2 +
-                 (encounter_df['driver_position_y'] - encounter_df[f'hazard_{hazard_num}_y'])**2)**0.5
+                ((encounter_df['driver_position_x'] - encounter_df[f'CoG position/X.hazard'])**2 +
+                 (encounter_df['driver_position_y'] - encounter_df[f'CoG position/Y.hazard'])**2)**0.5
                 < COLLISION_DISTANCE, 'Timestamp'
             ].min()
 
@@ -76,7 +75,7 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
                          'global_collision_flag': encounter_df['global_collision_flag'].any(),
                          'time_of_collision': first_collision_time, 'record_count': len(encounter_df)}
         collision_summary = collision_summary._append(collision_row, ignore_index=True)
-
+        
         encounter_df.to_csv(f'{participant_folder}/labeled_data_{p_num}_{intersection_type}_{file_label}.csv', index=False)
 
 print(f'collisions={collision_total};ncollisions={ncollision_total}')

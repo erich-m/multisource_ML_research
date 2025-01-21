@@ -36,7 +36,7 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
         encounter_df = pd.read_csv(f'data/intermediary_data/encounter_data/participant_{p_num}/encounter_data_{p_num}_{intersection_type}.csv')
         encounter_df.columns = encounter_df.columns.str.strip()
 
-        # Find the vehicle with the minimum distance
+        # get the hazard number from the hazard order summary sheet (number betweeen 1 and 4)
         moving_hazard = int((hazard_labels.iloc[0,current_hazard*2]).split('_')[1])+1
 
         # Get the column names for the hazard x and y positions
@@ -47,7 +47,7 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
         encounter_df[f'hazard_{moving_hazard}_y'] = encounter_df[hazard_y_col]
         
         # initialize gaze intersection column
-        encounter_df['gaze_intersects_hazard'] = False
+        encounter_df['Is_Gaze_On_Hazard'] = False
         
         # store vectors for timeline visualization
         timeline_data = {
@@ -157,7 +157,7 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
             distance = np.linalg.norm(closest_point - hazard_position)
 
             # check if distance is within radius
-            encounter_df.loc[idx, 'gaze_intersects_hazard'] = distance <= HAZARD_RADIUS
+            encounter_df.loc[idx, 'Is_Gaze_On_Hazard'] = distance <= HAZARD_RADIUS
             if distance <= HAZARD_RADIUS:
                 intersect_count += 1
             
@@ -261,7 +261,37 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
         plt.close()
 
         encounter_df['yaw_continuous'] = np.unwrap(np.radians(encounter_df['CoG position/Yaw'])) * 180 / np.pi
+
+        # clean up columns and features depending on hazard for the given intersection
+        encounter_df.rename(columns={"Over-steering criteria2":"Over-steering criteria","ExportChannel/1":"ExportChannel1/","ExportChannel/3":"ExportChannel3/","ExportChannel/4":"ExportChannel4/",f"distance_to_inter_{current_hazard}":"distance_to_inter"},inplace=True) # rename columns ending in numbers
+        # print(moving_hazard)
+
+        # remove non-hazard data
+        for col in encounter_df.columns:
+            if col[-1].isdigit():
+                if int(col[-1]) != moving_hazard:
+                    encounter_df.drop(columns=[col], inplace=True)
+                else:
+                    new_col_name = col[:-1] + 'hazard'
+                    encounter_df.rename(columns={col: new_col_name}, inplace=True)
+
+            if col.startswith("Data Eyeleft") or col.startswith("Data Eyeright") or col.startswith("hazard"):
+                encounter_df.drop(columns=[col],inplace=True);
         
+        encounter_df.drop(columns=["Type_gaze"],inplace=True)
+        # Remove random column that appears in only a couple of the particpant data files
+        if 'CoG position/Yaw.hazard' in encounter_df.columns:
+            encounter_df.drop(columns=["CoG position/Yaw.hazard"],inplace=True)
+        
+        
+        # for c, col in enumerate(encounter_df.columns):
+        #     print(c,col)
+        
+        # print(len(encounter_df.columns) )
+        
+        if len(encounter_df.columns) != 79: # confirm that all dataframes have the same length and flag if condition is not met
+            print(p_num,intersection_type)
+
         encounter_df.to_csv(f'data/intermediary_data/transformed_encounter_data/participant_{p_num}/transformed_data_{p_num}_{intersection_type}.csv',index=False)
         # print(f"for intersection {intersection_type}, {p_num}. intersect_count={intersect_count}")
 
