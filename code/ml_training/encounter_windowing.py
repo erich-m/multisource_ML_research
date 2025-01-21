@@ -23,11 +23,11 @@ c_i = 0
 
 # create the bin directories in processed data
 for b in range(0,BINS):
-    os.makedirs(f'data/processed_data/binned_data/bin_{b}',exist_ok=True)
+    os.makedirs(f'data/processed_data/binned_data_{window_size}/bin_{b}',exist_ok=True)
 
     # cleanup existing files in bins
-    for file in os.listdir(f'data/processed_data/binned_data/bin_{b}'):
-        os.remove(os.path.join(f'data/processed_data/binned_data/bin_{b}',file))
+    for file in os.listdir(f'data/processed_data/binned_data_{window_size}/bin_{b}'):
+        os.remove(os.path.join(f'data/processed_data/binned_data_{window_size}/bin_{b}',file))
 
 # shuffle the order of the participants
 collision_summary = collision_summary.sample(frac=1,random_state=RANDOM_STATE).reset_index(drop=True)
@@ -58,7 +58,7 @@ for i in tqdm(range(0,len(collision_summary)),colour='green'):
     # if the participant has a collision, add to bin and update the c_i index
     if global_collision_flag:
         src = f'data/intermediary_data/labeled_data/participant_{p_num}/labeled_data_{p_num}_{intersection_type}_c.csv'
-        dst = f'data/processed_data/binned_data/bin_{c_i}/labeled_data_{p_num}_{intersection_type}_c.csv'
+        dst = f'data/processed_data/binned_data_{window_size}/bin_{c_i}/labeled_data_{p_num}_{intersection_type}_c.csv'
         
         if os.path.isfile(src):
             df = pd.read_csv(src)
@@ -68,7 +68,7 @@ for i in tqdm(range(0,len(collision_summary)),colour='green'):
     else:
         # if the participant has no collision, add to bin and update the nc_i index
         src = f'data/intermediary_data/labeled_data/participant_{p_num}/labeled_data_{p_num}_{intersection_type}_nc.csv'
-        dst = f'data/processed_data/binned_data/bin_{nc_i}/labeled_data_{p_num}_{intersection_type}_nc.csv'
+        dst = f'data/processed_data/binned_data_{window_size}/bin_{nc_i}/labeled_data_{p_num}_{intersection_type}_nc.csv'
         
         if os.path.isfile(src):
             df = pd.read_csv(src)
