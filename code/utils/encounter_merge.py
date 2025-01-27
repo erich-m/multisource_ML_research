@@ -42,17 +42,6 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
         # merge the three datasets together into a single dataframe using the timestamp as the index
         merged_df = drive_encounter.join([gaze_encounter,imu_encounter], how='outer')
         merged_df = merged_df.infer_objects(copy=False)
-        merged_df.index = pd.to_numeric(merged_df.index)
-        merged_df.sort_index(inplace=True)
-
-        # interpolate missing values using spline interpolation (default is order 5 spline)
-        # fill remaining values (front and end of dataframe columns using linear interpolation)
-        # * there are still some columns in some of the dataframes that are entirely empty and should be removed before training any models
-        # ! there is a suppressed warning with the interpolation. some of the values are too small and so the spline is approximated
-        # print(merged_df.shape)
-        # merge the three datasets together into a single dataframe using the timestamp as the index
-        merged_df = drive_encounter.join([gaze_encounter,imu_encounter], how='outer')
-        merged_df = merged_df.infer_objects(copy=False)
 
         # Clean the index
         merged_df = merged_df[merged_df.index.notna()]  # Remove rows with NaN indices
@@ -60,18 +49,35 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
         merged_df = merged_df[merged_df.index.notna()]  # Remove any rows where index conversion created NaNs
         merged_df.sort_index(inplace=True)
 
-        # interpolate missing values using spline interpolation (default is order 5 spline)
-        merged_df.interpolate(method='spline',order=splineOrder,inplace=True)
-        merged_df.interpolate(method='ffill', inplace=True) # fill in remaining NAN values
-        merged_df.interpolate(method='bfill', inplace=True) # fill in remaining NAN values
-        # print(merged_df.head)
-        # print(merged_df.isna().sum())
+        # Separate numeric and categorical columns for appropriate interpolation
+        numeric_columns = merged_df.select_dtypes(include=[np.number]).columns
+        categorical_columns = merged_df.select_dtypes(exclude=[np.number]).columns
+
+        # interpolate numeric columns using spline interpolation
+        merged_df[numeric_columns] = merged_df[numeric_columns].interpolate(method='spline', order=splineOrder)
+        merged_df[numeric_columns] = merged_df[numeric_columns].fillna(method='ffill')
+        merged_df[numeric_columns] = merged_df[numeric_columns].fillna(method='bfill')
+
+        # Handle categorical columns with forward/backward fill
+        merged_df[categorical_columns] = merged_df[categorical_columns].fillna(method='ffill')
+        merged_df[categorical_columns] = merged_df[categorical_columns].fillna(method='bfill')
 
         os.makedirs(f'data/intermediary_data/encounter_data/participant_{p_num}', exist_ok=True)
         merged_df.index.name = 'Timestamp'
 
-        # for c, col in enumerate(merged_df.columns):
-        #     print(c,col)
-
         merged_df.drop(columns=["Type_imu"],inplace=True) # remove unnessecary columns
+        
+        # Check for any remaining null values
+        # ! Eye tracking for the following is either missing completely or onyl contains timestamps and nothing else
+        # ! This issue is resolved later since the processing is built off the participant summary list and removing participant data will cause issues
+        # * Participant 2 - lthalf
+        # * Participant 9 - ltsignal, ltminor, lthalf
+        # * Participant 19 - all
+        # * Participant 26 - lthalf, ltsignal, ltmajor
+        # * Participant 49 - ltmajor
+        # * Participant 51 - lthalf 
+        # if merged_df.isna().sum().any():
+        #     print(f"\nRemaining null values for participant {p_num}, intersection {intersection_type}:")
+        #     null_columns = merged_df.columns[merged_df.isna().any()].tolist()
+
         merged_df.to_csv(f'data/intermediary_data/encounter_data/participant_{p_num}/encounter_data_{p_num}_{intersection_type}.csv',index=True)
