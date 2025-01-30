@@ -5,7 +5,9 @@ There is also a time to collision that is calculated by taking the time of colli
 This label can be used for regression. if there is no collision, the flag previous is set to false and the time_to_collision is set to inf """
 import pandas as pd
 import numpy as np
+
 import os
+import sys
 from tqdm import tqdm
 
 import warnings
@@ -69,7 +71,7 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
             encounter_df['time_to_collision_flag'] = first_collision_time - encounter_df['Timestamp']
             collision_total += 1
         else:
-            encounter_df['time_to_collision_flag'] = np.inf
+            encounter_df['time_to_collision_flag'] = sys.float_info.max
             ncollision_total += 1
 
         file_label = 'c' if encounter_df['global_collision_flag'].any() else 'nc'
