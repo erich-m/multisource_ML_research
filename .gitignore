@@ -164,3 +164,6 @@ cython_debug/
 # custom
 private.txt
 *.jar
+./data/processed_data/final_data_10/training.csv
+./data/processed_data/final_data_15/training.csv
+./data/processed_data/final_data_20/training.csv
