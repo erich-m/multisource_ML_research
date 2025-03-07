@@ -105,7 +105,7 @@ for summary_index, summary_row in tqdm(data_summary.iterrows(), total=len(data_s
             
             # project to horizontal plane using X and Z components from glasses space
             # since Z is forward and X is left in glasses space, we want to use these for the car's XY plane
-            combined_gaze_horizontal = np.array([combined_gaze[2], -combined_gaze[0]])  # [forward, left] components
+            combined_gaze_horizontal = np.array([combined_gaze_global[2], -combined_gaze_global[0]])  # [forward, left] components
             combined_gaze_horizontal = combined_gaze_horizontal / np.linalg.norm(combined_gaze_horizontal)
             
             # get the yaw rotation of the car 

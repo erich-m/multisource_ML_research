@@ -1,0 +1,53 @@
+// Computational graph for the feedforward sweep
+digraph LSTMClassifier {
+	graph [label=<<B>LSTMClassifier</B><br align='left'/>13 tensors total (2.2 MB)<br align='left'/>1344641 params total (5.1 MB)<br align='left'/>> labeljust=left labelloc=t ordering=out rankdir=BT]
+	node [ordering=out]
+	input_1 [label=<<b>input_1</b><br/>64x20x11 (55.1 KB)<br/>@input.x> color=black fillcolor="#98FB98" fontcolor=black ordering=out shape=oval style="filled,solid"]
+	input_1 -> lstm_1_3pass1 [label=<<FONT POINT-SIZE='10'><b>arg 0</b></FONT>> arrowsize=.7 color=black fontcolor=black labelfontsize=8 style=solid]
+	input_1 -> lstm_1_3pass2 [label=<<FONT POINT-SIZE='10'><b>arg 0</b></FONT>> arrowsize=.7 color=black fontcolor=black labelfontsize=8 style=solid]
+	input_1 -> lstm_1_3pass3 [label=<<FONT POINT-SIZE='10'><b>arg 0</b></FONT>> arrowsize=.7 color=black fontcolor=black labelfontsize=8 style=solid]
+	zeros_1_1 [label=<<b>zeros_1_1</b><br/>3x64x256 (192.1 KB)> color=black fillcolor=white fontcolor=black ordering=out shape=oval style="filled,dashed"]
+	zeros_2_2 [label=<<b>zeros_2_2</b><br/>3x64x256 (192.1 KB)> color=black fillcolor=white fontcolor=black ordering=out shape=oval style="filled,dashed"]
+	lstm_1_3pass1 [label=<<b>lstm_1_3:1</b><br/>64x20x256 (1.3 MB)<br/>params: 1024x11, 1024x256, x1024, x1024, 1024x256, 1024x256, x1024, x1024, 1024x256, 1024x256, x1024, x1024> color=black fillcolor="#E6E6E6" fontcolor=black ordering=out shape=oval style="filled,solid"]
+	lstm_1_3pass1 -> getitem_1_4 [arrowsize=.7 color=black fontcolor=black labelfontsize=8 style=solid]
+	lstm_1_3pass2 [label=<<b>lstm_1_3:2</b><br/>3x64x256 (192.1 KB)<br/>params: 1024x11, 1024x256, x1024, x1024, 1024x256, 1024x256, x1024, x1024, 1024x256, 1024x256, x1024, x1024> color=black fillcolor="#E6E6E6" fontcolor=black ordering=out shape=oval style="filled,solid"]
+	lstm_1_3pass3 [label=<<b>lstm_1_3:3</b><br/>3x64x256 (192.1 KB)<br/>params: 1024x11, 1024x256, x1024, x1024, 1024x256, 1024x256, x1024, x1024, 1024x256, 1024x256, x1024, x1024> color=black fillcolor="#E6E6E6" fontcolor=black ordering=out shape=oval style="filled,solid"]
+	getitem_1_4 [label=<<b>getitem_1_4</b><br/>64x256 (64.1 KB)> color=black fillcolor=white fontcolor=black ordering=out shape=oval style="filled,solid"]
+	getitem_1_4 -> linear_1_5 [arrowsize=.7 color=black fontcolor=black labelfontsize=8 style=solid]
+	linear_1_5 [label=<<b>linear_1_5</b><br/>64x64 (16.1 KB)<br/>params: 64x256, x64<br/>@fc1> color=black fillcolor="#E6E6E6" fontcolor=black ordering=out shape=box style="filled,solid"]
+	linear_1_5 -> relu_1_6 [arrowsize=.7 color=black fontcolor=black labelfontsize=8 style=solid]
+	relu_1_6 [label=<<b>relu_1_6</b><br/>64x64 (16.1 KB)<br/>@relu> color=black fillcolor=white fontcolor=black ordering=out shape=box style="filled,solid"]
+	relu_1_6 -> dropout_1_7 [arrowsize=.7 color=black fontcolor=black labelfontsize=8 style=solid]
+	dropout_1_7 [label=<<b>dropout_1_7</b><br/>64x64 (16.1 KB)<br/>@dropout> color=black fillcolor=white fontcolor=black ordering=out shape=box style="filled,solid"]
+	dropout_1_7 -> linear_2_8 [arrowsize=.7 color=black fontcolor=black labelfontsize=8 style=solid]
+	linear_2_8 [label=<<b>linear_2_8</b><br/>64x1 (384 B)<br/>params: 1x64, x1<br/>@fc2> color=black fillcolor="#E6E6E6" fontcolor=black ordering=out shape=box style="filled,solid"]
+	linear_2_8 -> view_1_9 [arrowsize=.7 color=black fontcolor=black labelfontsize=8 style=solid]
+	view_1_9 [label=<<b>view_1_9</b><br/>x64 (368 B)> color=black fillcolor=white fontcolor=black ordering=out shape=oval style="filled,solid"]
+	view_1_9 -> output_1 [arrowsize=.7 color=black fontcolor=black labelfontsize=8 style=solid]
+	output_1 [label=<<b>output_1</b><br/>x64 (368 B)<br/>@output> color=black fillcolor="#ff9999" fontcolor=black ordering=out shape=oval style="filled,solid"]
+	{
+		rank=sink
+		output_1
+	}
+	subgraph cluster_lstm_pass1 {
+		fillcolor=white label=<<B>@lstm</B><br align='left'/>(LSTM)<br align='left'/>> labelloc=b penwidth=5.0 style="filled,solid"
+		zeros_1_1 -> lstm_1_3pass1 [label=<<FONT POINT-SIZE='10'><b>arg (1, 0)</b></FONT>> arrowsize=.7 color=black fontcolor=black labelfontsize=8 style=dashed]
+		zeros_1_1 -> lstm_1_3pass2 [label=<<FONT POINT-SIZE='10'><b>arg (1, 0)</b></FONT>> arrowsize=.7 color=black fontcolor=black labelfontsize=8 style=dashed]
+		zeros_1_1 -> lstm_1_3pass3 [label=<<FONT POINT-SIZE='10'><b>arg (1, 0)</b></FONT>> arrowsize=.7 color=black fontcolor=black labelfontsize=8 style=dashed]
+		zeros_2_2 -> lstm_1_3pass1 [label=<<FONT POINT-SIZE='10'><b>arg (1, 1)</b></FONT>> arrowsize=.7 color=black fontcolor=black labelfontsize=8 style=dashed]
+		zeros_2_2 -> lstm_1_3pass2 [label=<<FONT POINT-SIZE='10'><b>arg (1, 1)</b></FONT>> arrowsize=.7 color=black fontcolor=black labelfontsize=8 style=dashed]
+		zeros_2_2 -> lstm_1_3pass3 [label=<<FONT POINT-SIZE='10'><b>arg (1, 1)</b></FONT>> arrowsize=.7 color=black fontcolor=black labelfontsize=8 style=dashed]
+	}
+	subgraph cluster_fc1_pass1 {
+		fillcolor=white label=<<B>@fc1</B><br align='left'/>(Linear)<br align='left'/>> labelloc=b penwidth=5.0 style="filled,dashed"
+	}
+	subgraph cluster_relu_pass1 {
+		fillcolor=white label=<<B>@relu</B><br align='left'/>(ReLU)<br align='left'/>> labelloc=b penwidth=5.0 style="filled,dashed"
+	}
+	subgraph cluster_dropout_pass1 {
+		fillcolor=white label=<<B>@dropout</B><br align='left'/>(Dropout)<br align='left'/>> labelloc=b penwidth=5.0 style="filled,dashed"
+	}
+	subgraph cluster_fc2_pass1 {
+		fillcolor=white label=<<B>@fc2</B><br align='left'/>(Linear)<br align='left'/>> labelloc=b penwidth=5.0 style="filled,dashed"
+	}
+}
