@@ -1,0 +1,63 @@
+column_list = ['Timestamp','CoG Acceleration/X','CoG Acceleration/Y','CoG position/X','CoG position/Y','CoG position/Roll','CoG position/Pitch','CoG position/Yaw',
+    'Horizontal tangential speed','Over-steering criteria2','Pitch %ground','Pitch acceleration','Pitch speed','Roll %ground','Roll acceleration','Roll speed','Slope force',
+    'Speed/X','Speed/Y','Tangent Acceleration/X','Tangent Acceleration/Y','Tangential speed','Yaw %ground','Yaw acceleration','Yaw speed',
+    'Brake pedal force','Gas pedal','Steering wheel angle','Steering wheel speed',
+    'Intersection Id','Lane gap',
+    'CoG Acceleration/X.1','CoG Acceleration/Y.1','CoG position/X.1','CoG position/Y.1','Pitch acceleration.1','Pitch speed.1','Roll acceleration.1','Roll speed.1','Speed/X.1','Speed/Y.1','Tangential speed.1','Yaw acceleration.1','Yaw speed.1',
+    'CoG Acceleration/X.2','CoG Acceleration/Y.2','CoG position/X.2','CoG position/Y.2','Pitch acceleration.2','Pitch speed.2','Roll acceleration.2','Roll speed.2','Speed/X.2','Speed/Y.2','Tangential speed.2','Yaw acceleration.2','Yaw speed.2',
+    'CoG Acceleration/X.3','CoG Acceleration/Y.3','CoG position/X.3','CoG position/Y.3','Pitch acceleration.3','Pitch speed.3','Roll acceleration.3','Roll speed.3','Speed/X.3','Speed/Y.3','Tangential speed.3','Yaw acceleration.3','Yaw speed.3',
+    'CoG Acceleration/X.4','CoG Acceleration/Y.4','CoG position/X.4','CoG position/Y.4','Pitch acceleration.4','Pitch speed.4','Roll acceleration.4','Roll speed.4','Speed/X.4','Speed/Y.4','Tangential speed.4','Yaw acceleration.4','Yaw speed.4',
+    'ExportChannel/1','ExportChannel/4','ExportChannel/3',
+    'Data Gaze2D X','Data Gaze2D Y',
+    'Data Gaze3D X','Data Gaze3D Y','Data Gaze3D Z',
+    'Data Eyeleft Gazeorigin X','Data Eyeleft Gazeorigin Y','Data Eyeleft Gazeorigin Z',
+    'Data Eyeleft Gazedirection X','Data Eyeleft Gazedirection Y','Data Eyeleft Gazedirection Z',
+    'Data Eyeleft Pupildiameter',
+    'Data Eyeright Gazeorigin X','Data Eyeright Gazeorigin Y','Data Eyeright Gazeorigin Z',
+    'Data Eyeright Gazedirection X','Data Eyeright Gazedirection Y','Data Eyeright Gazedirection Z',
+    'Data Eyeright Pupildiameter',
+    'Data Accelerometer X','Data Accelerometer Y','Data Accelerometer Z',
+    'Data Gyroscope X','Data Gyroscope Y','Data Gyroscope Z',
+    'Data Magnetometer X','Data Magnetometer Y','Data Magnetometer Z'
+    ]
+
+drop_column_list = ['Intersection Id',
+    'ExportChannel/1','ExportChannel/4','ExportChannel/3',
+    ]
+
+
+reduced list:
+['Timestamp', 'CoG Acceleration/X', 'CoG Acceleration/Y',
+       'CoG position/X', 'CoG position/Y', 'Speed/X', 'Speed/Y',
+       'Brake pedal force', 'Gas pedal', 'Steering wheel angle',
+       'Steering wheel speed', 'CoG position/X.haz', 'CoG position/Y.haz',
+       'Data Gaze2D X', 'Data Gaze2D Y', 'Data Gaze3D X', 'Data Gaze3D Y',
+       'Data Gaze3D Z', 'Data Eyeleft Gazeorigin X',
+       'Data Eyeleft Gazeorigin Y', 'Data Eyeleft Gazeorigin Z',
+       'Data Eyeleft Gazedirection X', 'Data Eyeleft Gazedirection Y',
+       'Data Eyeleft Gazedirection Z', 'Data Eyeleft Pupildiameter',
+       'Data Eyeright Gazeorigin X', 'Data Eyeright Gazeorigin Y',
+       'Data Eyeright Gazeorigin Z', 'Data Eyeright Gazedirection X',
+       'Data Eyeright Gazedirection Y', 'Data Eyeright Gazedirection Z',
+       'Data Eyeright Pupildiameter', 'Data Accelerometer X',
+       'Data Accelerometer Y', 'Data Accelerometer Z', 'Data Gyroscope X',
+       'Data Gyroscope Y', 'Data Gyroscope Z', 'Data Magnetometer X',
+       'Data Magnetometer Y', 'Data Magnetometer Z']
+
+
+reduced list + engineered features:
+['Timestamp', 'CoG Acceleration/X', 'CoG Acceleration/Y',
+       'CoG position/X', 'CoG position/Y', 'Speed/X', 'Speed/Y',
+       'Brake pedal force', 'Gas pedal', 'Steering wheel angle',
+       'Steering wheel speed', 'CoG position/X.haz', 'CoG position/Y.haz',
+       'Data Gaze2D X', 'Data Gaze2D Y', 'Data Gaze3D X', 'Data Gaze3D Y',
+       'Data Gaze3D Z', 'Data Accelerometer X', 'Data Accelerometer Y',
+       'Data Accelerometer Z', 'Data Gyroscope X', 'Data Gyroscope Y',
+       'Data Gyroscope Z', 'Data Magnetometer X', 'Data Magnetometer Y',
+       'Data Magnetometer Z', 'Avg_Gazeorigin_X', 'Avg_Gazeorigin_Y',
+       'Avg_Gazeorigin_Z', 'Avg_Gazedirection_X', 'Avg_Gazedirection_Y',
+       'Avg_Gazedirection_Z', 'Avg_Pupildiameter', 'fixation_id', 'event_type',
+       'fixation_start_time', 'fixation_end_time', 'fixation_duration',
+       'fixation_centroid_x', 'fixation_centroid_y', 'fixation_point_count',
+       'fixation_dispersion_x', 'fixation_dispersion_y', 'fixation_dispersion', 'ego_to_haz_dist',
+       'time_to_collision']
