@@ -146,38 +146,9 @@ Provided is a brief summary of the machine learning pipeline for this project:
 2. **Training the Model:**  
 3. **Testing the Model:**  
 
-### Configuration
+## Models, Performance, Results
 
-In-progress
-
----
-
-## Model Training & Testing
-
-### Training Process
-
-- **Training Script:** In-progress
-- **Data Used:** In-progress
-
-### Testing Process
-
-- **Testing Script:** In-progress
-- **Metrics:** In-progress
-
----
-
-## Results
-
-### Model Performance
-
-In-progress
-
-- **Training Results:** In-progress
-- **Testing Results:** In-progress
-
-### Comparison of Models
-
-In-progress
+- **All results are published in my [thesis](https://hdl.handle.net/10214/29495)**
 
 ---
 
