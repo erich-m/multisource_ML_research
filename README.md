@@ -2,7 +2,7 @@
 
 ## [***A Machine Learning Evaluation Framework for Identifying the Critical Level of Safety for Smart Automated Driving-Assistive Systems***](https://hdl.handle.net/10214/29495)
 
-This ML project aims to create and design a ML model capable of predicting vehicle collisions in simulated turn-across-path hazard events, using both driving data obtained from a driving simulator, and eye-tracking data to provide more insight into driving behaviour and patterns.
+Smart automated driving-assistive systems must maintain a high level of accuracy and precision to be considered safe. Understanding the critical threshold of accuracy relative to hazard events is crucial for establishing trust, ensuring safety, and facilitating implementation. This study uses literature-based methodologies and techniques to derive a framework for evaluating machine learning models for accuracy as a function of distance between a driver and a hazard vehicle, and as a function of time from a driver vehicle to an intersection where a hazard is located. Results show collision prediction accuracy reaches up to 97% within 13.81m of a hazard and within 1s of reaching the impeding hazard, indicating practical success as a collision prediction classifier model and an overarching framework for evaluating machine-learning powered vehicle safety systems.
 
 ---
 
