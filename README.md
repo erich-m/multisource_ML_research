@@ -1,4 +1,5 @@
-# Official Code Written and Produced for a thesis on *A Machine Learning Evaluation Framework for Identifying the Critical Level of Safety for Smart Automated Driving-Assistive Systems*
+# Official Code Written and Produced for my thesis
+*A Machine Learning Evaluation Framework for Identifying the Critical Level of Safety for Smart Automated Driving-Assistive Systems*
 
 This ML project aims to create and design a ML model capable of predicting vehicle collisions in simulated turn-across-path hazard events, using both driving data obtained from a driving simulator, and eye-tracking data to provide more insight into driving behaviour and patterns.
 
