@@ -1,4 +1,4 @@
-# Official Code Written and Produced for my Thesis
+# Thesis Code Repository
 
 ## [***A Machine Learning Evaluation Framework for Identifying the Critical Level of Safety for Smart Automated Driving-Assistive Systems***](https://hdl.handle.net/10214/29495)
 
